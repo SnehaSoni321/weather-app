@@ -5,51 +5,55 @@ const Tempapp = () => {
     const [city, setCity] = useState(null);
     const [search, setSearch] = useState("Mumbai");
 
-    useEffect( () => {
+    useEffect(() => {
         const fetchApi = async () => {
-            const url = `http://api.openweathermap.org/data/2.5/weather?q=${search}&units=metric&appid=745d054856a88d4bd5f7bfdf99f1fbee`
+            const url = `https://api.openweathermap.org/data/2.5/weather?q=${search}&units=metric&appid=745d054856a88d4bd5f7bfdf99f1fbee`
             const response = await fetch(url);
-           const resJson = await response.json();
-          //  console.log(response);
-            setCity(resJson.main);
+            const resJson = await response.json();
+
+            if (resJson.cod === 200) {
+                setCity(resJson.main);
+            } else {
+                setCity(null);
+            }
 
         };
 
         fetchApi();
-    },[search] )
+    }, [search])
 
     return (
         <>
-        <div className="box">
-            <div className="inputData">
-                <input 
-                type="search"
-                value={search}
-                className="inputFeild" 
-                onChange={(event) => { setSearch(event.target.value)}}/>
-            </div>
-
-        {!city ? (
-                <p className="errorMsg">No Data Found </p>
-            ) : (
-                <div>
-            <div className="info">
-            <h2 className="location" >
-            <i className="fas fa-street-view"></i> {search}
-            </h2>
-            <h1 className="temp"> 
-                {city.temp} Cel
-            </h1>
-            <h3 className="tempmin_max"> Min : {city.temp_min} Cel | Max : {city.temp_max} Cel </h3>
-
-           </div>
-           <div className="wave -one"></div>
-           <div className="wave -two"></div>
-           <div className="wave -three"></div>
+            <div className="box">
+                <div className="inputData">
+                    <input
+                        type="search"
+                        value={search}
+                        className="inputFeild"
+                        onChange={(event) => { setSearch(event.target.value) }} />
                 </div>
-            )}
 
-        </div>
+                {!city ? (
+                    <p className="errorMsg">No Data Found </p>
+                ) : (
+                    <div>
+                        <div className="info">
+                            <h2 className="location" >
+                                <i className="fas fa-street-view"></i> {search}
+                            </h2>
+                            <h1 className="temp">
+                                {city.temp} Cel
+                            </h1>
+                            <h3 className="tempmin_max"> Min : {city.temp_min} Cel | Max : {city.temp_max} Cel </h3>
+
+                        </div>
+                        <div className="wave -one"></div>
+                        <div className="wave -two"></div>
+                        <div className="wave -three"></div>
+                    </div>
+                )}
+
+            </div>
         </>
     )
 }
